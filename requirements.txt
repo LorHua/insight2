@@ -9,4 +9,3 @@ python-ldap
 captcha==0.3
 cas_client
 xlwt
-
