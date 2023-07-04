@@ -30,11 +30,11 @@ def get_default_role():
 @url(r"/login", needcheck = False, category = "用户")
 class Login(BaseHandler):
     """
-        用户登陆
+        用户登录
 
         username*: 用户名
         password*: 密码
-        auth_from: 登陆类型[LOCAL(default), 1, 2, 3, ...]
+        auth_from: 登录类型[LOCAL(default), 1, 2, 3, ...]
     """
     def get(self):
         """
@@ -88,7 +88,7 @@ class Login(BaseHandler):
                 mq.delete(__session__)
                 self.write(dict(status = False, msg = "用户名或密码错误", refresh = 1))
             elif user.enable == 0:
-                self.write(dict(status = False, msg = "用户无法正常登陆，请联系管理员!"))
+                self.write(dict(status = False, msg = "用户无法正常登录，请联系管理员!"))
             elif user.enable == -1:
                 self.write(dict(status = False, msg = "用户认证成功，未激活，请联系管理员!"))
             else:
@@ -97,7 +97,7 @@ class Login(BaseHandler):
                 User.update(login_time = time.time(), auth_from = "LOCAL").where(User.id == user.id).execute()
                 role = model_to_dict(user.role)
                 role["id"] = role.pop("_id")
-                self.write(dict(status = True, msg = "登陆成功", role = role))
+                self.write(dict(status = True, msg = "登录成功", role = role))
         elif auth_from:
             authinfo = AuthMode.get_or_none(AuthMode.id == auth_from)
             status, msg = auth_login(model_to_dict(authinfo), username, password)
@@ -111,7 +111,7 @@ class Login(BaseHandler):
                 User(username = username, role_id = role_id, auth_from = auth_from, enable = -1).save()
                 self.write(dict(status = False, msg = "用户认证成功，未激活，请联系管理员!"))
             elif user.enable == 0:
-                self.write(dict(status = False, msg = "用户无法正常登陆，请联系管理员!"))
+                self.write(dict(status = False, msg = "用户无法正常登录，请联系管理员!"))
             elif user.enable == -1:
                 self.write(dict(status = False, msg = "用户认证成功，未激活，请联系管理员!"))
             else:
@@ -120,7 +120,7 @@ class Login(BaseHandler):
                 User.update(auth_from = authinfo.mode, login_time = time.time(), is_del = 0).where(User.id == user.id).execute()
                 role = model_to_dict(user.role)
                 role["id"] = role.pop("_id")
-                self.write(dict(status = True, msg = "登陆成功", role = role))
+                self.write(dict(status = True, msg = "登录成功", role = role))
 
         mq.delete(__session__)
 

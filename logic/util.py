@@ -34,13 +34,15 @@ def gen_code():
     for i in range(4):
         code += CODE[randint(0, len(CODE) - 1)]
 
-    out = "/tmp/{}.png".format(str(uuid1()))
+    #out = "/tmp/{}.png".format(str(uuid1()))
+    out = "{}.png".format(str(uuid1()))
 
     #image = ImageCaptcha(width=100, height=30, font_sizes = (40, 46, 50))
     image = ImageCaptcha()
     data = image.generate(code)
-
+    print("----------code:{}".format(code))
     image.write(code, out)
+
     return code, out
 
 def get_crontab(sched):
